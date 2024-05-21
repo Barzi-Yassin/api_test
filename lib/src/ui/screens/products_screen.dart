@@ -1,7 +1,7 @@
 import 'package:api_test/main.dart';
-import 'package:api_test/src/data/products/product_data.dart';
-import 'package:api_test/src/data/products/product_model.dart';
-import 'package:api_test/src/data/products/products_model.dart';
+import 'package:api_test/src/features/products/data/product_data.dart';
+import 'package:api_test/src/features/products/models/product_model.dart';
+import 'package:api_test/src/features/products/models/products_model.dart';
 import 'package:flutter/material.dart';
 
 class ProductsScreen extends StatefulWidget {
