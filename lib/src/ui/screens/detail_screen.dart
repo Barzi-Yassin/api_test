@@ -1,65 +1,87 @@
-import 'dart:ffi';
-
 import 'package:api_test/src/data/products/product_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class DetailScreen extends StatefulWidget {
-  DetailScreen({
-    super.key,
-    // this.product,
-  });
+  const DetailScreen({super.key});
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  late Product product;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    product = ModalRoute.of(context)!.settings.arguments as Product;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Product product =
-        ModalRoute.of(context)!.settings.arguments as Product;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detail'),
-      ),
-      body: SizedBox(
-        height: double.infinity,
-        width: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              buildDescription(product),
-              const SizedBox(height: 40),
-              SizedBox(
-                height: 200,
-                width: MediaQuery.of(context).size.width,
-                // width: 200,
-                child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: product!.images.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 15),
-                  itemBuilder: (context, index) => ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: Image.network(
-                      product.images.elementAt(index),
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            SizedBox(
+              height: double.infinity,
+              width: double.infinity,
+              child: SingleChildScrollView(
+                child: buildDescription(product),
+              ),
+            ),
+            Positioned(
+              left: 5,
+              top: 5,
+              child: Icon(
+                Icons.circle,
+                color: Colors.blueGrey.shade300,
+                size: 35,
+              ),
+            ),
+            Positioned(
+              left: 10,
+              top: 10,
+              child: InkWell(
+                onTap: () => Navigator.pop(context),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 20)
-            ],
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: buildImageSlider(context, product),
+    );
+  }
+
+  Widget buildImageSlider(BuildContext context, Product product) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 15),
+      height: 200,
+      width: screenWidth,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        scrollDirection: Axis.horizontal,
+        itemCount: product.images.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 15),
+        itemBuilder: (context, index) => ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: SizedBox(
+            width: screenWidth - 50,
+            child: Image.network(
+              product.images.elementAt(index),
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget buildDescription(Product p) {
+  Column buildDescription(Product p) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -71,13 +93,20 @@ class _DetailScreenState extends State<DetailScreen> {
         const SizedBox(height: 20),
         Text("${p.brand}/ ${p.category}"),
         Text(p.title),
-        Text(p.description),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          child: Text(
+            p.description,
+            textAlign: TextAlign.justify,
+          ),
+        ),
         Text("Price: \$${p.price}"),
-        // Text("Discout percentage: %${p.discountPercentage}"),
+        // Text("Discount percentage: %${p.discountPercentage}"),
         Text(
             "Discout price: \$${(p.price - (p.price * p.discountPercentage / 100))}"),
         Text('Rating: ${p.rating} / 5'),
         Text('Following images: ${p.images.length}'),
+        const SizedBox(height: 20),
       ],
     );
   }
