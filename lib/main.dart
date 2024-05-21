@@ -1,7 +1,7 @@
-import 'package:api_test/src/ui/screens/detail_screen.dart';
+import 'package:api_test/src/features/products/screens/detail_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'package:api_test/src/ui/screens/products_screen.dart';
+import 'package:api_test/src/features/products/screens/products_screen.dart';
 
 void main() => runApp(const App());
 
