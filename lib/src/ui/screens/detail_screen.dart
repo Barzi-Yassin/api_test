@@ -1,4 +1,5 @@
 import 'package:api_test/src/data/products/product_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -71,9 +72,10 @@ class _DetailScreenState extends State<DetailScreen> {
           borderRadius: BorderRadius.circular(30),
           child: SizedBox(
             width: screenWidth - 50,
-            child: Image.network(
-              product.images.elementAt(index),
+            child: CachedNetworkImage(
+              imageUrl: product.images.elementAt(index),
               fit: BoxFit.contain,
+              height: 185,
             ),
           ),
         ),
@@ -85,11 +87,16 @@ class _DetailScreenState extends State<DetailScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Image.network(
-          p.thumbnail,
+        CachedNetworkImage(
+          imageUrl: p.thumbnail,
           fit: BoxFit.contain,
           width: double.infinity,
         ),
+        // Image.network(
+        //   p.thumbnail,
+        //   fit: BoxFit.contain,
+        //   width: double.infinity,
+        // ),
         const SizedBox(height: 20),
         Text("${p.brand}/ ${p.category}"),
         Text(p.title),
