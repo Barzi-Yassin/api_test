@@ -4,25 +4,25 @@ import 'package:flutter/foundation.dart';
 
 import 'package:api_test/src/features/products/models/product_model.dart';
 
-class Products {
+class ProductPack {
   final List<Product> products;
   final int total;
   final int skip;
   final int limit;
-  Products({
+  ProductPack({
     required this.products,
     required this.total,
     required this.skip,
     required this.limit,
   });
 
-  Products copyWith({
+  ProductPack copyWith({
     List<Product>? products,
     int? total,
     int? skip,
     int? limit,
   }) {
-    return Products(
+    return ProductPack(
       products: products ?? this.products,
       total: total ?? this.total,
       skip: skip ?? this.skip,
@@ -39,8 +39,8 @@ class Products {
     };
   }
 
-  factory Products.fromMap(Map<String, dynamic> map) {
-    return Products(
+  factory ProductPack.fromMap(Map<String, dynamic> map) {
+    return ProductPack(
       products: List<Product>.from(
         (map['products'] as List<Map<String, Object>>).map<Product>(
           (x) => Product.fromMap(x as Map<String, dynamic>),
@@ -54,8 +54,8 @@ class Products {
 
   String toJson() => json.encode(toMap());
 
-  factory Products.fromJson(String source) =>
-      Products.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ProductPack.fromJson(String source) =>
+      ProductPack.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -63,7 +63,7 @@ class Products {
   }
 
   @override
-  bool operator ==(covariant Products other) {
+  bool operator ==(covariant ProductPack other) {
     if (identical(this, other)) return true;
 
     return listEquals(other.products, products) &&
