@@ -6,7 +6,7 @@ class Product {
   final int id;
   final String title;
   final String description;
-  final int price;
+  final double price;
   final double discountPercentage;
   final double rating;
   final int stock;
@@ -14,6 +14,7 @@ class Product {
   final String category;
   final String thumbnail;
   final List<String> images;
+
   Product({
     required this.id,
     required this.title,
@@ -32,7 +33,7 @@ class Product {
     int? id,
     String? title,
     String? description,
-    int? price,
+    double? price,
     double? discountPercentage,
     double? rating,
     int? stock,
@@ -74,19 +75,17 @@ class Product {
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      id: map['id'].toInt() as int,
+      id: map['id'] as int,
       title: map['title'] as String,
       description: map['description'] as String,
-      price: map['price'].toInt() as int,
+      price: map['price'].toDouble() as double,
       discountPercentage: map['discountPercentage'].toDouble() as double,
       rating: map['rating'].toDouble() as double,
-      stock: map['stock'].toInt() as int,
+      stock: map['stock'] as int,
       brand: map['brand'] as String,
       category: map['category'] as String,
       thumbnail: map['thumbnail'] as String,
-      images: List<String>.from(
-        (map['images'] as List<String>),
-      ),
+      images: List<String>.from(map['images']),
     );
   }
 

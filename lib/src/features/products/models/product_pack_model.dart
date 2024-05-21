@@ -9,6 +9,7 @@ class ProductPack {
   final int total;
   final int skip;
   final int limit;
+
   ProductPack({
     required this.products,
     required this.total,
@@ -42,8 +43,8 @@ class ProductPack {
   factory ProductPack.fromMap(Map<String, dynamic> map) {
     return ProductPack(
       products: List<Product>.from(
-        (map['products'] as List<Map<String, Object>>).map<Product>(
-          (x) => Product.fromMap(x as Map<String, dynamic>),
+        (map['products'] as List<dynamic>).map<Product>(
+          (dynamic x) => Product.fromMap(x as Map<String, dynamic>),
         ),
       ),
       total: map['total'].toInt() as int,
@@ -59,7 +60,7 @@ class ProductPack {
 
   @override
   String toString() {
-    return 'Products(products: $products, total: $total, skip: $skip, limit: $limit)';
+    return 'ProductPack(products: $products, total: $total, skip: $skip, limit: $limit)';
   }
 
   @override

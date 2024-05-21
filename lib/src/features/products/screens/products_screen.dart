@@ -39,9 +39,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   void get toggleDataSource => setState(() {
         switchCurrentValue = !switchCurrentValue;
-        if (switchCurrentValue == true) {
-          fetchProductsFromApi;
-        }
+        switchCurrentValue ? fetchProductsFromApi : fetchProductsFromLocal;
+        // if (switchCurrentValue) {
+        //   fetchProductsFromApi;
+        // } 
         debugPrint('switchCurrentValue: $switchCurrentValue');
       });
 
