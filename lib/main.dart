@@ -16,15 +16,15 @@ class App extends StatelessWidget {
       routes: {
         Routes.initialRoute: (context) => const ProductsScreen(),
         Routes.productsScreen: (context) => const ProductsScreen(),
-        Routes.detailScreen: (context) => const DetailScreen(),
+        Routes.detailScreen: (context) => DetailScreen(),
       },
     );
   }
 
   ThemeData _themeData() {
     return ThemeData(
-        appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.blueGrey,
+        appBarTheme: AppBarTheme(
+      backgroundColor: Colors.blueGrey.shade300,
     ));
   }
 }
