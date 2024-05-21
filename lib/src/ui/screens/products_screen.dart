@@ -12,6 +12,9 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
+  bool switchCurrentValue =
+      false; // fetching data from (switchCurrentValue ? api : local)
+
   Products products = Products.fromMap(productsData);
 
   @override
@@ -24,7 +27,18 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 100,
         title: const Text('Products'),
+        actions: [
+          const Text('Local  '),
+          Switch(
+            value: switchCurrentValue,
+            onChanged: (_) =>
+                setState(() => switchCurrentValue = !switchCurrentValue),
+          ),
+          const Text('  API'),
+          const SizedBox(width: 50),
+        ],
       ),
       body: SizedBox(
         height: double.infinity,

@@ -11,21 +11,27 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: _themeData(),
       initialRoute: Routes.initialRoute,
       routes: {
         Routes.initialRoute: (context) => const ProductsScreen(),
         Routes.productsScreen: (context) => const ProductsScreen(),
-        Routes.detailScreen: (context) => DetailScreen(),
+        Routes.detailScreen: (context) => const DetailScreen(),
       },
     );
   }
 
   ThemeData _themeData() {
     return ThemeData(
-        appBarTheme: AppBarTheme(
-      backgroundColor: Colors.blueGrey.shade300,
-    ));
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.blueGrey.shade300,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.all(Colors.black87),
+        trackColor: MaterialStateProperty.all(Colors.white24),
+      ),
+    );
   }
 }
 
