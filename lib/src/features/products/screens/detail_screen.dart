@@ -1,6 +1,7 @@
-import 'package:api_test/src/features/products/models/product_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
+import 'package:api_test/src/features/products/models/product_model.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key});
