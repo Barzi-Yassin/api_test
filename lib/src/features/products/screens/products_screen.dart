@@ -13,7 +13,7 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  late ProductPack products;
+  late ProductPack productPack;
 
   bool switchCurrentValue =
       false; // fetching data from (switchCurrentValue ? api : local)
@@ -22,27 +22,23 @@ class _ProductsScreenState extends State<ProductsScreen> {
   void initState() {
     super.initState();
     fetchProductsFromLocal; // since the switchCurrentValue init value is 'false', so we fetch products from local data.
-    // debugPrint('$products');
   }
 
   void get fetchProductsFromLocal =>
-      setState(() => products = ProductPack.fromMap(productsData));
+      setState(() => productPack = ProductPack.fromMap(productsData));
 
   void get fetchProductsFromApi async {
     final ProductPack? productsFromApi = await ProductService.fetchProducts;
     setState(
       () => productsFromApi == null
           ? switchCurrentValue = false
-          : products = productsFromApi,
+          : productPack = productsFromApi,
     );
   }
 
   void get toggleDataSource => setState(() {
         switchCurrentValue = !switchCurrentValue;
         switchCurrentValue ? fetchProductsFromApi : fetchProductsFromLocal;
-        // if (switchCurrentValue) {
-        //   fetchProductsFromApi;
-        // } 
         debugPrint('switchCurrentValue: $switchCurrentValue');
       });
 
@@ -53,32 +49,44 @@ class _ProductsScreenState extends State<ProductsScreen> {
         toolbarHeight: 100,
         title: const Text('Products'),
         actions: [
-          const Text('Local  '),
+          textWithBorder("  Local  ", false),
           Switch(
             value: switchCurrentValue,
             onChanged: (_) => toggleDataSource,
           ),
-          const Text('  API'),
+          textWithBorder("  API  ", true),
           const SizedBox(width: 50),
         ],
       ),
       body: SizedBox(
         height: double.infinity,
         width: double.infinity,
-        child: products.products.isEmpty
+        child: productPack.products.isEmpty
             ? const Center(child: Text('No products found!'))
             : ListView.separated(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 30),
-                itemCount: products.products.length,
+                padding: const EdgeInsets.fromLTRB(14, 30, 14, 200),
+                itemCount: productPack.products.length,
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 10),
                 itemBuilder: (context, index) {
-                  final Product product = products.products.elementAt(index);
+                  final Product product = productPack.products.elementAt(index);
                   return productCard(index, product);
                 },
               ),
       ),
+    );
+  }
+
+  Container textWithBorder(String text, bool dataSource) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      decoration: switchCurrentValue == dataSource
+          ? BoxDecoration(
+              border: Border.all(color: Colors.white60, width: 1),
+              borderRadius: BorderRadius.circular(15),
+            )
+          : null,
+      child: Text(text),
     );
   }
 

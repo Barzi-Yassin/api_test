@@ -26,6 +26,7 @@ class App extends StatelessWidget {
     return ThemeData(
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.blueGrey.shade300,
+        foregroundColor: Colors.white,
       ),
       switchTheme: SwitchThemeData(
         thumbColor: MaterialStateProperty.all(Colors.black87),

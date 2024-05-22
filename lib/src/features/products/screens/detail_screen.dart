@@ -110,8 +110,8 @@ class _DetailScreenState extends State<DetailScreen> {
         Text("Price: \$${p.price}"),
         // Text("Discount percentage: %${p.discountPercentage}"),
         Text(
-            "Discout price: \$${(p.price - (p.price * p.discountPercentage / 100))}"),
-        Text('Rating: ${p.rating} / 5'),
+            "Discount price: \$${(p.price - (p.price * p.discountPercentage / 100))}"),
+        Text('Rating: ${p.rating} / 5 ☆'),
         Text('Following images: ${p.images.length}'),
         const SizedBox(height: 20),
       ],
