@@ -10,6 +10,15 @@ class ProductPack {
   final int skip;
   final int limit;
 
+  factory ProductPack.setBoilerPlate() {
+    return ProductPack(
+      products: [],
+      total: 100,
+      skip: 0,
+      limit: 30,
+    );
+  }
+
   ProductPack({
     required this.products,
     required this.total,

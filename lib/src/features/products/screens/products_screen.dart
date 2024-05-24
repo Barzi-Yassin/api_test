@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:api_test/src/app.dart';
-import 'package:api_test/src/features/products/data/product_data.dart';
+import 'package:api_test/src/features/products/data/product_pack_data_2.dart';
 import 'package:api_test/src/features/products/models/product_model.dart';
 import 'package:api_test/src/features/products/models/product_pack_model.dart';
 import 'package:api_test/src/features/products/services/product_service.dart';
@@ -14,7 +14,7 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  late ProductPack productPack;
+  late ProductPack productPack = ProductPack.setBoilerPlate();
 
   bool switchCurrentValue =
       false; // fetching data from (switchCurrentValue ? api : local)
@@ -26,7 +26,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   void get fetchProductsFromLocal =>
-      setState(() => productPack = ProductPack.fromMap(productsData));
+      setState(() => productPack = ProductPack.fromMap(productPackData2));
 
   void get fetchProductsFromApi async {
     final ProductPack? productsFromApi = await ProductService.fetchProducts;
@@ -58,6 +58,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
           textWithBorder("  API  ", true),
           const SizedBox(width: 50),
         ],
+        bottom: AppBar(
+          title: Text(
+            'Fetching data from "${switchCurrentValue ? 'API' : 'Local'}"',
+          ),
+        ),
       ),
       body: SizedBox(
         height: double.infinity,
@@ -67,6 +72,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
             : ListView.separated(
                 padding: const EdgeInsets.fromLTRB(14, 30, 14, 200),
                 itemCount: productPack.products.length,
+                // itemCount: 1,
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 10),
                 itemBuilder: (context, index) {
@@ -99,9 +105,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
           arguments: product,
         ),
         leading: Text("${index + 1}"),
-        title: Text(product.title),
-        subtitle: Text("${product.brand}/ ${product.category}"),
-        trailing: Text("\$${product.price} "),
+        title: Text(product.title?? 'title'),
+        subtitle: Text("${product.brand ?? 'brand'}/ ${product.category ?? 'category'}"),
+        trailing: Text("\$${product.price ?? 'price'} "),
       ),
     );
   }

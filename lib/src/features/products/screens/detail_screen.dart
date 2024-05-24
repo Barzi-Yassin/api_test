@@ -12,6 +12,7 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   late Product product;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -58,28 +59,37 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget buildImageSlider(BuildContext context, Product product) {
+  Container buildImageSlider(BuildContext context, Product product) {
     final double screenWidth = MediaQuery.of(context).size.width;
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
-      height: 200,
+      height: 210,
       width: screenWidth,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        scrollDirection: Axis.horizontal,
-        itemCount: product.images.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 15),
-        itemBuilder: (context, index) => ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: SizedBox(
-            width: screenWidth - 50,
-            child: CachedNetworkImage(
-              imageUrl: product.images.elementAt(index),
-              fit: BoxFit.contain,
-              height: 185,
+      child: Column(
+        children: [
+          const Divider(
+            height: 2,
+            color: Colors.black45,
+          ),
+          SizedBox(
+            height: 200,
+            width: screenWidth,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              scrollDirection: Axis.horizontal,
+              itemCount: product.images!.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 15),
+              itemBuilder: (context, index) => ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: SizedBox(
+                  width: screenWidth - 50,
+                  child: CachedNetImgWidget(
+                      imgUrl: product.images!.elementAt(index)),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -88,34 +98,87 @@ class _DetailScreenState extends State<DetailScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        CachedNetworkImage(
-          imageUrl: p.thumbnail,
-          fit: BoxFit.contain,
+        CachedNetImgWidget(
+          imgUrl: p.thumbnail!,
           width: double.infinity,
         ),
-        // Image.network(
-        //   p.thumbnail,
-        //   fit: BoxFit.contain,
-        //   width: double.infinity,
-        // ),
         const SizedBox(height: 20),
-        Text("${p.brand}/ ${p.category}"),
-        Text(p.title),
+        Text("${p.brand ?? 'brand'}/ ${p.category ?? 'category'}"),
+        Text(p.title!),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
           child: Text(
-            p.description,
+            p.description!,
             textAlign: TextAlign.justify,
           ),
         ),
         Text("Price: \$${p.price}"),
         // Text("Discount percentage: %${p.discountPercentage}"),
         Text(
-            "Discount price: \$${(p.price - (p.price * p.discountPercentage / 100))}"),
+            "Discount price: \$${(p.price! - (p.price! * p.discountPercentage! / 100))}"),
         Text('Rating: ${p.rating} / 5 ☆'),
-        Text('Following images: ${p.images.length}'),
-        const SizedBox(height: 20),
+        Text('Following images: ${p.images!.length}'),
+        const SizedBox(height: 80),
       ],
+    );
+  }
+}
+
+class CachedNetImgWidget extends StatefulWidget {
+  const CachedNetImgWidget({
+    super.key,
+    required this.imgUrl,
+    this.width,
+  });
+
+  final String imgUrl;
+  final double? width;
+
+  @override
+  State<CachedNetImgWidget> createState() => _CachedNetImgWidgetState();
+}
+
+class _CachedNetImgWidgetState extends State<CachedNetImgWidget> {
+  double? _imageHeight;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _precacheImage();
+  }
+
+  Future<void> _precacheImage() async {
+    final image = NetworkImage(widget.imgUrl);
+    await precacheImage(image, context);
+    image.resolve(const ImageConfiguration()).addListener(
+      ImageStreamListener((ImageInfo info, bool _) {
+        setState(() {
+          _imageHeight = info.image.height.toDouble();
+        });
+      }),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: widget.width,
+      height: _imageHeight ?? 200, // Fallback height while loading
+      child: CachedNetworkImage(
+        imageUrl: widget.imgUrl,
+        fit: BoxFit.contain,
+        width: widget.width,
+        errorWidget: (context, url, error) => const Center(
+          child:
+              CircularProgressIndicator.adaptive(backgroundColor: Colors.red),
+        ),
+        progressIndicatorBuilder: (context, url, progress) => Center(
+          child: CircularProgressIndicator.adaptive(
+            backgroundColor: Colors.grey,
+            value: progress.progress,
+          ),
+        ),
+      ),
     );
   }
 }
