@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import 'package:api_test/src/features/products/models/product_model.dart';
+import 'package:api_test/src/features/products/models/product/product_model.dart';
+import 'package:api_test/src/features/products/presentation/widgets/catched_net_img_widget.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key});
@@ -12,6 +12,7 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   late Product product;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -58,28 +59,37 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget buildImageSlider(BuildContext context, Product product) {
+  Container buildImageSlider(BuildContext context, Product product) {
     final double screenWidth = MediaQuery.of(context).size.width;
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
-      height: 200,
+      height: 210,
       width: screenWidth,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        scrollDirection: Axis.horizontal,
-        itemCount: product.images.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 15),
-        itemBuilder: (context, index) => ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: SizedBox(
-            width: screenWidth - 50,
-            child: CachedNetworkImage(
-              imageUrl: product.images.elementAt(index),
-              fit: BoxFit.contain,
-              height: 185,
+      child: Column(
+        children: [
+          const Divider(
+            height: 2,
+            color: Colors.black45,
+          ),
+          SizedBox(
+            height: 200,
+            width: screenWidth,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              scrollDirection: Axis.horizontal,
+              itemCount: product.images!.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 15),
+              itemBuilder: (context, index) => ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: SizedBox(
+                  width: screenWidth - 50,
+                  child: CachedNetImgWidget(
+                      imgUrl: product.images!.elementAt(index)),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -88,33 +98,27 @@ class _DetailScreenState extends State<DetailScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        CachedNetworkImage(
-          imageUrl: p.thumbnail,
-          fit: BoxFit.contain,
+        CachedNetImgWidget(
+          imgUrl: p.thumbnail!,
           width: double.infinity,
         ),
-        // Image.network(
-        //   p.thumbnail,
-        //   fit: BoxFit.contain,
-        //   width: double.infinity,
-        // ),
         const SizedBox(height: 20),
-        Text("${p.brand}/ ${p.category}"),
-        Text(p.title),
+        Text("${p.brand ?? 'brand'}/ ${p.category ?? 'category'}"),
+        Text(p.title!),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
           child: Text(
-            p.description,
+            p.description!,
             textAlign: TextAlign.justify,
           ),
         ),
         Text("Price: \$${p.price}"),
         // Text("Discount percentage: %${p.discountPercentage}"),
         Text(
-            "Discount price: \$${(p.price - (p.price * p.discountPercentage / 100))}"),
+            "Discount price: \$${(p.price! - (p.price! * p.discountPercentage! / 100))}"),
         Text('Rating: ${p.rating} / 5 ☆'),
-        Text('Following images: ${p.images.length}'),
-        const SizedBox(height: 20),
+        Text('Following images: ${p.images!.length}'),
+        const SizedBox(height: 80),
       ],
     );
   }

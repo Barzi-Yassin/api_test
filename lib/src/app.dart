@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:api_test/src/features/products/screens/detail_screen.dart';
-import 'package:api_test/src/features/products/screens/products_screen.dart';
+import 'package:api_test/src/features/products/presentation/screens/detail_screen.dart';
+import 'package:api_test/src/features/products/presentation/screens/products_screen.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -29,6 +29,9 @@ class App extends StatelessWidget {
       switchTheme: SwitchThemeData(
         thumbColor: MaterialStateProperty.all(Colors.black87),
         trackColor: MaterialStateProperty.all(Colors.white24),
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: Colors.blueGrey.shade700,
       ),
     );
   }

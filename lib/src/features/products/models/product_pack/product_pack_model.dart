@@ -2,13 +2,22 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:api_test/src/features/products/models/product_model.dart';
+import 'package:api_test/src/features/products/models/product/product_model.dart';
 
 class ProductPack {
   final List<Product> products;
   final int total;
   final int skip;
   final int limit;
+
+  factory ProductPack.setBoilerPlate() {
+    return ProductPack(
+      products: [],
+      total: 100,
+      skip: 0,
+      limit: 30,
+    );
+  }
 
   ProductPack({
     required this.products,
