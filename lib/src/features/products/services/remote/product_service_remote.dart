@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:api_test/src/features/products/models/product_pack_model.dart';
+import 'package:api_test/src/features/products/models/product_pack/product_pack_model.dart';
 
-class ProductService {
+class ProductServiceRemote {
   static const String _url = 'https://dummyjson.com/products';
 
   static Future<ProductPack?> get fetchProducts async {

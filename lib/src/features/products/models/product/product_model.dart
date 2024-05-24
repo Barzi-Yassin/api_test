@@ -3,7 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:api_test/src/features/products/models/product_secondary_models.dart';
+import 'package:api_test/src/features/products/models/product/secondary/dimensions_model.dart';
+import 'package:api_test/src/features/products/models/product/secondary/meta_model.dart';
+import 'package:api_test/src/features/products/models/product/secondary/review_model.dart';
 
 class Product {
   int? id;

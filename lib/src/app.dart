@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:api_test/src/features/products/screens/detail_screen.dart';
-import 'package:api_test/src/features/products/screens/products_screen.dart';
+import 'package:api_test/src/features/products/presentation/screens/detail_screen.dart';
+import 'package:api_test/src/features/products/presentation/screens/products_screen.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

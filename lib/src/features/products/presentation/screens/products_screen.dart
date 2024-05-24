@@ -1,10 +1,11 @@
+import 'package:api_test/src/features/products/services/local/product_service_local.dart';
 import 'package:flutter/material.dart';
 
 import 'package:api_test/src/app.dart';
 import 'package:api_test/src/features/products/data/product_pack_data_2.dart';
-import 'package:api_test/src/features/products/models/product_model.dart';
-import 'package:api_test/src/features/products/models/product_pack_model.dart';
-import 'package:api_test/src/features/products/services/product_service.dart';
+import 'package:api_test/src/features/products/models/product/product_model.dart';
+import 'package:api_test/src/features/products/models/product_pack/product_pack_model.dart';
+import 'package:api_test/src/features/products/services/remote/product_service_remote.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -26,10 +27,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   void get fetchProductsFromLocal =>
-      setState(() => productPack = ProductPack.fromMap(productPackData2));
+      setState(() => productPack = ProductServiceLocal.fetchProducts);
 
   void get fetchProductsFromApi async {
-    final ProductPack? productsFromApi = await ProductService.fetchProducts;
+    final ProductPack? productsFromApi =
+        await ProductServiceRemote.fetchProducts;
     setState(
       () => productsFromApi == null
           ? switchCurrentValue = false
@@ -105,8 +107,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
           arguments: product,
         ),
         leading: Text("${index + 1}"),
-        title: Text(product.title?? 'title'),
-        subtitle: Text("${product.brand ?? 'brand'}/ ${product.category ?? 'category'}"),
+        title: Text(product.title ?? 'title'),
+        subtitle: Text(
+            "${product.brand ?? 'brand'}/ ${product.category ?? 'category'}"),
         trailing: Text("\$${product.price ?? 'price'} "),
       ),
     );

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:api_test/src/features/products/models/product_model.dart';
+import 'package:api_test/src/features/products/models/product/product_model.dart';
 
 class ProductPack {
   final List<Product> products;
