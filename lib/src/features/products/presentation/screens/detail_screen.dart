@@ -1,7 +1,7 @@
-import 'package:api_test/src/features/products/presentation/widgets/catched_net_img_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:api_test/src/features/products/models/product/product_model.dart';
+import 'package:api_test/src/features/products/presentation/widgets/catched_net_img_widget.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key});

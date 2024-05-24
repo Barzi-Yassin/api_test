@@ -30,6 +30,9 @@ class App extends StatelessWidget {
         thumbColor: MaterialStateProperty.all(Colors.black87),
         trackColor: MaterialStateProperty.all(Colors.white24),
       ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: Colors.blueGrey.shade700,
+      ),
     );
   }
 }

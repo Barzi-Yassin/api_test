@@ -1,10 +1,9 @@
-import 'package:api_test/src/features/products/services/local/product_service_local.dart';
 import 'package:flutter/material.dart';
 
 import 'package:api_test/src/app.dart';
-import 'package:api_test/src/features/products/data/product_pack_data_2.dart';
 import 'package:api_test/src/features/products/models/product/product_model.dart';
 import 'package:api_test/src/features/products/models/product_pack/product_pack_model.dart';
+import 'package:api_test/src/features/products/services/local/product_service_local.dart';
 import 'package:api_test/src/features/products/services/remote/product_service_remote.dart';
 
 class ProductsScreen extends StatefulWidget {
@@ -19,7 +18,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   bool switchCurrentValue =
       false; // fetching data from (switchCurrentValue ? api : local)
-
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -30,18 +29,23 @@ class _ProductsScreenState extends State<ProductsScreen> {
       setState(() => productPack = ProductServiceLocal.fetchProducts);
 
   void get fetchProductsFromApi async {
+    setState(() => isLoading = true);
     final ProductPack? productsFromApi =
         await ProductServiceRemote.fetchProducts;
+
     setState(
-      () => productsFromApi == null
-          ? switchCurrentValue = false
-          : productPack = productsFromApi,
+      () {
+        productsFromApi == null
+            ? switchCurrentValue = false
+            : productPack = productsFromApi;
+        isLoading = false;
+      },
     );
   }
 
   void get toggleDataSource => setState(() {
         switchCurrentValue = !switchCurrentValue;
-        switchCurrentValue ? fetchProductsFromApi : fetchProductsFromLocal;
+        switchCurrentValue ? {fetchProductsFromApi} : fetchProductsFromLocal;
         debugPrint('switchCurrentValue: $switchCurrentValue');
       });
 
@@ -49,7 +53,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 100,
+        toolbarHeight: 70,
         title: const Text('Products'),
         actions: [
           textWithBorder("  Local  ", false),
@@ -61,9 +65,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
           const SizedBox(width: 50),
         ],
         bottom: AppBar(
-          title: Text(
-            'Fetching data from "${switchCurrentValue ? 'API' : 'Local'}"',
-          ),
+          title: isLoading
+              ? const LinearProgressIndicator()
+              : Text(
+                  // 'Fetching data from "${switchCurrentValue ? 'API' : 'Local'}"',
+                  '${productPack.products.length} products from "${switchCurrentValue ? 'API' : 'Local'}"',
+                  style: const TextStyle(fontSize: 16),
+                ),
         ),
       ),
       body: SizedBox(
@@ -71,17 +79,20 @@ class _ProductsScreenState extends State<ProductsScreen> {
         width: double.infinity,
         child: productPack.products.isEmpty
             ? const Center(child: Text('No products found!'))
-            : ListView.separated(
-                padding: const EdgeInsets.fromLTRB(14, 30, 14, 200),
-                itemCount: productPack.products.length,
-                // itemCount: 1,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 10),
-                itemBuilder: (context, index) {
-                  final Product product = productPack.products.elementAt(index);
-                  return productCard(index, product);
-                },
-              ),
+            : isLoading
+                ? const SizedBox()
+                : (ListView.separated(
+                    // here we can return data directly from api using Future or Stream builders (Recommended for production environment)
+                    padding: const EdgeInsets.fromLTRB(14, 30, 14, 200),
+                    itemCount: productPack.products.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      final Product product =
+                          productPack.products.elementAt(index);
+                      return productCard(index, product);
+                    },
+                  )),
       ),
     );
   }
