@@ -1,0 +1,7 @@
+adding the change_app_package_name package to dev dependencies
+
+then running the following command to change the package name in both android and ios:
+    dart run change_app_package_name:main testing11.packagename12
+
+to show the current package name for both android and ios in terminal:
+    echo "Android Package Name:" && grep applicationId android/app/build.gradle && echo "iOS Package Name:" && grep PRODUCT_BUNDLE_IDENTIFIER ios/Runner.xcodeproj/project.pbxproj
